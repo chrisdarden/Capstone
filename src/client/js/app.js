@@ -2,8 +2,15 @@
 
 const pressMe = document.getElementById('generate');
 // const url = `api.openweathermap.org/data/2.5/forecast?zip=${zip}&appid=${apiKey}`;
-const apiKey = '11c9e76990abe3815380a5ff63f9b004';
 const baseUrl = `http://api.openweathermap.org/data/2.5/forecast?`;
+
+// API Key
+const dotenv = require('dotenv');
+dotenv.config();
+
+const api_key = process.env.API_KEY;
+console.log("API key = " + api_key);
+
 
 // Date Function
 function getDate() {
