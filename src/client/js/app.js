@@ -1,16 +1,12 @@
 /* Global Variables */
 
-const pressMe = document.getElementById('generate');
-// const url = `api.openweathermap.org/data/2.5/forecast?zip=${zip}&appid=${apiKey}`;
-const baseUrl = `http://api.openweathermap.org/data/2.5/forecast?`;
+const pressMe = document.getElementById('submit');
 
 // API Key
-const dotenv = require('dotenv');
-dotenv.config();
-
-const api_key = process.env.API_KEY;
-console.log("API key = " + api_key);
-
+// const dotenv = require('dotenv');
+// dotenv.config();
+// const api_key = process.env.geonameKey;
+// console.log("Geoname key = " + geonameKey);
 
 // Date Function
 function getDate() {
@@ -23,23 +19,25 @@ function getDate() {
 // Generate event listener on generate button
 pressMe.addEventListener('click', (e) => {
     e.preventDefault();
+    console.log("Pressed")
     let zip = document.getElementById("zip").value;
+    console.log(zip)
     if (zip == "" || zip.length < 5) {
         window.alert('Please enter a zipcode of 5 digits.');
         return
     } else {
-        let fullURL = baseUrl + `zip=${zip}&appid=${apiKey}&units=imperial`;
-        retrieveData(fullURL);
+        let geonameUrl = `http://api.geonames.org/postalCodeSearchJSON?postalcode=${zip}&username=chrisdarden`;
+        retrieveData(geonameUrl);
     }
 });
 
 // Retrieve the data from api
-const retrieveData = async(fullURL) => {
-    // console.log("retrieve data");
-    // console.log(fullURL);
-    // console.log(data);
+const retrieveData = async(geonameUrl) => {
+    console.log("retrieve data");
+    console.log(geonameUrl);
 
-    const request = await fetch(fullURL)
+    // first fetch attempt to geoname url
+    const request = await fetch(geonameUrl)
         .then(response => response.json())
         .then(data => addEntry({...data }))
         .catch(error => console.log(`Error: ${error}`));
@@ -49,16 +47,16 @@ const retrieveData = async(fullURL) => {
 // Send the data to the server
 const addEntry = (data) => {
     const payload = data;
-    // console.log(data);
-    let newDate = getDate();
+    console.log(data);
+    // let newDate = getDate();
     const userData = {
-            newDate,
-            zip: zip.value,
-            feelings: feelings.value,
-            temperature: data.list[0].main.temp,
+        zip: zip.value,
+        name: postalCodes[0].placeName,
+        lat: postalCodes[0].lat,
+        lng: postalCodes[0].lng,
 
-        }
-        // console.log(userData);
+    }
+    console.log(userData);
     fetch('/entry', {
             method: 'POST',
             credentials: 'same-origin',

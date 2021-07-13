@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Weather Journal</title>
+    <title>Travel Weather App!</title>
     <link href="https://fonts.googleapis.com/css?family=Oswald:400,600,700|Ranga:400,700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
@@ -11,19 +11,29 @@
 <body>
     <div id="app">
         <div class="holder headline">
-            <h1>Weather Journal App</h1>
+            <h1>Travel Weather App</h1>
         </div>
+
         <div class="holder zip">
-            <label for="zip">Enter Zipcode here</label>
+            <label for="zip">Enter zipcode here: </label>
             <input type="text" id="zip" placeholder="enter zip code here">
         </div>
-        <div class="holder feel">
-            <label for="feelings">How are you feeling today?</label>
-            <textarea class="myInput" id="feelings" placeholder="Enter your feelings here"></textarea>
-            <button id="generate" type="submit"> Generate </button>
+        <div class="holder date">
+            Enter your departure date: <input type="date" id="departureDate">
+            <br> Enter your return date: <input type="date" id="returnDate">
         </div>
+        <br>
+        <br>
+        <button type="submit" id="submit" value="submit">Submit</button>
+
+
+
+
+
+        <br>
+
         <div class="holder entry">
-            <div class="title">Most Recent Entry</div>
+            <div class="title">The weather at your location of <span id="chosenLocation"></span></div>will be:
             <div id="entryHolder">
                 <div id="date"></div>
                 <div id="temp"></div>
@@ -31,7 +41,7 @@
             </div>
         </div>
     </div>
-    <script src="app.js" type="text/javascript"></script>
+    <script src="/src/client/js/app.js" type="text/javascript"></script>
 
 </body>
 
