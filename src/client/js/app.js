@@ -1,12 +1,12 @@
+import "src/client/styles/style.scss"
+
+
 /* Global Variables */
+
+const { response, request } = require("express");
 
 const pressMe = document.getElementById('submit');
 
-// API Key
-// const dotenv = require('dotenv');
-// dotenv.config();
-// const api_key = process.env.geonameKey;
-// console.log("Geoname key = " + geonameKey);
 
 // Date Function
 function getDate() {
@@ -26,47 +26,52 @@ pressMe.addEventListener('click', (e) => {
         window.alert('Please enter a zipcode of 5 digits.');
         return
     } else {
-        let geonameUrl = `http://api.geonames.org/postalCodeSearchJSON?postalcode=${zip}&username=chrisdarden`;
-        retrieveData(geonameUrl);
+        retrieveData();
     }
 });
 
 // Retrieve the data from api
-const retrieveData = async(geonameUrl) => {
+const retrieveData = async(req, res) => {
     console.log("retrieve data");
     console.log(geonameUrl);
 
     // first fetch attempt to geoname url
-    const request = await fetch(geonameUrl)
+    const request = await fetch("/geoname")
         .then(response => response.json())
-        .then(data => addEntry({...data }))
+
+    // sends data to server
+    .then(data => addEntry({...data }))
         .catch(error => console.log(`Error: ${error}`));
 
 };
 
 // Send the data to the server
 const addEntry = (data) => {
+    console.log("in addEntry")
+    console.log("name= " + data.postalCodes[0].placeName)
+    console.log("lat= " + data.postalCodes[0].lat)
+    console.log("lng= " + data.postalCodes[0].lng)
     const payload = data;
     console.log(data);
     // let newDate = getDate();
     const userData = {
         zip: zip.value,
-        name: postalCodes[0].placeName,
-        lat: postalCodes[0].lat,
-        lng: postalCodes[0].lng,
+        name: data.postalCodes[0].placeName,
+        lat: data.postalCodes[0].lat,
+        lng: data.postalCodes[0].lng,
 
     }
     console.log(userData);
-    fetch('/entry', {
-            method: 'POST',
-            credentials: 'same-origin',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(payload)
-        })
-        // .then(userData => response.json())
-        .then(() => getData())
-        .then(updateUI(userData))
-        .catch(error => console.log(`Error: ${error}`));
+    // fetch('/entry', {
+    //         method: 'POST',
+    //         credentials: 'same-origin',
+    //         headers: { 'Content-Type': 'application/json' },
+    //         body: JSON.stringify(payload)
+    //     })
+    //     // .then(userData => response.json())
+    //     // .then(() => getData())
+    //     // .then(updateUI(userData))
+    //     .catch(error => console.log(`Error: ${error}`));
 };
 
 // Function to update UI 

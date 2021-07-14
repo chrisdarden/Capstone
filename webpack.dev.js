@@ -2,9 +2,10 @@ const path = require('path')
 const webpack = require('webpack')
 const HtmlWebPackPlugin = require("html-webpack-plugin")
 const { CleanWebpackPlugin } = require('clean-webpack-plugin')
-    // version 1
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+// version 1
 module.exports = {
-    entry: './src/client/index.js',
+    entry: 'src/client/js/app.js',
     mode: 'development',
     devtool: 'source-map',
     stats: 'verbose',
@@ -22,7 +23,7 @@ module.exports = {
     },
     plugins: [
         new HtmlWebPackPlugin({
-            template: "./src/client/views/index.html",
+            template: "src/client/views/index.html",
             filename: "./index.html",
             minify: false
         }),

@@ -1,5 +1,10 @@
-// Setup empty JS object to act as endpoint for all routes
-projectData = {};
+// API Key
+const dotenv = require('dotenv');
+dotenv.config();
+
+const apikey = process.env.geonameKey;
+console.log("Geoname key = " + apikey);
+
 const port = 8000;
 // Require Express to run server and routes
 var express = require('express');
@@ -24,14 +29,23 @@ const server = app.listen(port, () => { console.log(`running on localhost: ${por
 
 app.use(express.static('website'));
 
-app.get("/entry", (req, res) => {
-    res.send(projectData);
-});
+app.get('/geoname', async(req, res) => {
+    const response = await fetch(`http://api.geonames.org/postalCodeSearchJSON?postalcode=${zip}&username=${apikey}`);
+    try {
+        const data = await response.json();
+        console.log(data);
+        res.send(data);
+    } catch (error) {
+        alert(error);
+        console.log("error", error);
 
-app.post("/entry", (req, res) => {
-    projectData = req.body;
-});
+    }
+})
 
-app.get("/api", (req, res) => {
-    res.send(apiKey);;
-});
+// app.post("/entry", (req, res) => {
+//     projectData = req.body;
+// });
+
+// app.get("/", (req, res) => {
+//     res.send("hello");;
+// });
