@@ -31,16 +31,14 @@ const retrieveData = async(req, res) => {
     console.log("retrieve data");
     console.log(`zipcode = ${res}`)
         // first fetch attempt to geoname url
-    await fetch('/geoname', {
+
+    fetch('/geonameApi', {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                'zip': res
-            })
+            body: JSON.stringify({ 'zip': res }),
+            headers: { 'Content-Type': 'application/json' }
         })
-        .then(response => response.json())
+        .then(res => res.json())
+        .then(console.log)
 
     // sends data to server
     .then(data => addEntry({...data }))
@@ -56,7 +54,6 @@ const addEntry = (data) => {
     console.log("lng= " + data.postalCodes[0].lng)
     const payload = data;
     console.log(data);
-    // let newDate = getDate();
     const userData = {
         zip: zip.value,
         name: data.postalCodes[0].placeName,

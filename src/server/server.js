@@ -4,8 +4,9 @@ const fetch = require('node-fetch');
 const dotenv = require('dotenv');
 dotenv.config();
 
-const apikey = process.env.apikey;
-console.log("Geoname key = " + apikey);
+
+const geonamekey = process.env.geonamekey;
+console.log("Geoname key = " + geonamekey);
 
 const port = 8080;
 // Require Express to run server and routes
@@ -33,11 +34,11 @@ app.use(express.static('website'));
 
 app.get('/', (req, res) => res.sendFile(path.resolve('dist/index.html')));
 
-app.get('/geoname', async(req, res) => {
+app.get('/geonameApi', (req, res) => {
     console.log("in geoname api")
-    const response = await fetch(`http://api.geonames.org/postalCodeSearchJSON?postalcode=${zip}&username=${apikey}`);
+    const response = fetch(`http://api.geonames.org/postalCodeSearchJSON?postalcode=${zip}&username=${apikey}`);
     try {
-        const data = await response.json();
+        const data = response.json();
         console.log(data);
         res.send(data);
     } catch (error) {
