@@ -1,11 +1,13 @@
+const path = require('path');
+const fetch = require('node-fetch');
 // API Key
 const dotenv = require('dotenv');
 dotenv.config();
 
-const apikey = process.env.geonameKey;
+const apikey = process.env.apikey;
 console.log("Geoname key = " + apikey);
 
-const port = 8000;
+const port = 8080;
 // Require Express to run server and routes
 var express = require('express');
 
@@ -29,7 +31,10 @@ const server = app.listen(port, () => { console.log(`running on localhost: ${por
 
 app.use(express.static('website'));
 
+app.get('/', (req, res) => res.sendFile(path.resolve('dist/index.html')));
+
 app.get('/geoname', async(req, res) => {
+    console.log("in geoname api")
     const response = await fetch(`http://api.geonames.org/postalCodeSearchJSON?postalcode=${zip}&username=${apikey}`);
     try {
         const data = await response.json();
@@ -44,8 +49,4 @@ app.get('/geoname', async(req, res) => {
 
 // app.post("/entry", (req, res) => {
 //     projectData = req.body;
-// });
-
-// app.get("/", (req, res) => {
-//     res.send("hello");;
 // });

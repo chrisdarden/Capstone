@@ -1,42 +1,45 @@
-import "src/client/styles/style.scss"
-
-
 /* Global Variables */
 
-const { response, request } = require("express");
-
 const pressMe = document.getElementById('submit');
-
+// const zipcode = document.getElementById("zip").value;
 
 // Date Function
-function getDate() {
-    let d = new Date();
-    let month = d.getMonth() + 1;
-    let newDate = month + '.' + d.getDate() + '.' + d.getFullYear();
-    return newDate;
-}
+// function getDate() {
+//     let d = new Date();
+//     let month = d.getMonth() + 1;
+//     let newDate = month + '.' + d.getDate() + '.' + d.getFullYear();
+//     return newDate;
+// }
 
 // Generate event listener on generate button
 pressMe.addEventListener('click', (e) => {
+
     e.preventDefault();
+    let zipcode = document.getElementById("zip").value;
     console.log("Pressed")
-    let zip = document.getElementById("zip").value;
-    console.log(zip)
-    if (zip == "" || zip.length < 5) {
+    console.log(`zipcode = ${zipcode}`)
+    if (zipcode == "" || zipcode.length < 5) {
         window.alert('Please enter a zipcode of 5 digits.');
         return
     } else {
-        retrieveData();
+        retrieveData("", zipcode);
     }
 });
 
 // Retrieve the data from api
 const retrieveData = async(req, res) => {
     console.log("retrieve data");
-    console.log(geonameUrl);
-
-    // first fetch attempt to geoname url
-    const request = await fetch("/geoname")
+    console.log(`zipcode = ${res}`)
+        // first fetch attempt to geoname url
+    await fetch('/geoname', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                'zip': res
+            })
+        })
         .then(response => response.json())
 
     // sends data to server
