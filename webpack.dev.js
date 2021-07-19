@@ -1,14 +1,11 @@
 const path = require('path')
 const webpack = require('webpack')
 const HtmlWebPackPlugin = require("html-webpack-plugin")
-const { CleanWebpackPlugin } = require('clean-webpack-plugin')
+const WorkboxPlugin = require('workbox-webpack-plugin')
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
-// version 1
 module.exports = {
-    entry: 'src/client/js/app.js',
-    mode: 'development',
-    devtool: 'source-map',
-    stats: 'verbose',
+    entry: './src/client/index.js',
+    mode: 'production',
     module: {
         rules: [{
                 test: '/\.js$/',
@@ -18,24 +15,18 @@ module.exports = {
             {
                 test: /\.css$/,
                 use: ['style-loader', 'css-loader', 'sass-loader']
+            },
+            {
+                test: /\.scss$/,
+                use: [MiniCssExtractPlugin.loader, "css-loader", "sass-loader"],
             }
         ]
     },
     plugins: [
         new HtmlWebPackPlugin({
-            template: "src/client/views/index.html",
+            template: "./src/client/views/index.html",
             filename: "./index.html",
-            minify: false
         }),
-        new CleanWebpackPlugin({
-            // Simulate the removal of files
-            dry: true,
-            // Write Logs to Console
-            verbose: true,
-            // Automatically remove all unused webpack assets on rebuild
-            cleanStaleWebpackAssets: true,
-            protectWebpackAssets: false
-        }),
-        // new WorkboxPlugin.GenerateSW()
+        new MiniCssExtractPlugin()
     ]
 }
