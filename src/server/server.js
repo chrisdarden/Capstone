@@ -1,53 +1,65 @@
-const path = require('path');
-const fetch = require('node-fetch');
-// API Key
-const dotenv = require('dotenv');
-dotenv.config();
-
-
-const geonamekey = process.env.geonamekey;
-console.log("Geoname key = " + geonamekey);
-
-const port = 8080;
-// Require Express to run server and routes
-var express = require('express');
-
-// Start up an instance of app
-var app = express();
-/* Middleware*/
-//Here we are configuring express to use body-parser as middle-ware.
-const bodyParser = require('body-parser')
+const express = require("express");
+const app = express();
+const bodyParser = require("body-parser");
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
-
-// Cors for cross origin allowance
-const cors = require('cors');
+const cors = require("cors");
+const { request } = require("express");
 app.use(cors());
-// Initialize the main project folder
 app.use(express.static('dist'));
 
-// Setup Server
+const port = 8080;
+const server = app.listen(port, listening);
 
-const server = app.listen(port, () => { console.log(`running on localhost: ${port}`) })
+function listening() {
+    console.log(`The server is running locally on port:${port}`);
+};
 
-app.use(express.static('website'));
+var locationData = [];
 
-app.get('/', (req, res) => res.sendFile(path.resolve('dist/index.html')));
+//POST
+app.post('/addCoordinates', storeCoordinates)
 
-app.get('/geonameApi', (req, res) => {
-    console.log("in geoname api")
-    const response = fetch(`http://api.geonames.org/postalCodeSearchJSON?postalcode=${zip}&username=${apikey}`);
-    try {
-        const data = response.json();
-        console.log(data);
-        res.send(data);
-    } catch (error) {
-        alert(error);
-        console.log("error", error);
-
+function storeCoordinates(req, res) {
+    newEntry = {
+        longitude: req.body.longitude,
+        latitude: req.body.latitude,
+        city: req.body.city,
+        cityName: req.body.cityName
     }
-})
+    locationData.push(newEntry)
+    console.log("Location Coordinates Received!")
+    res.send(locationData)
+}
 
-// app.post("/entry", (req, res) => {
-//     projectData = req.body;
-// });
+//GET
+app.get('/getLocation', getLocationData)
+
+function getLocationData(req, res) {
+    res.send(locationData)
+    console.log("Location Coordinates Send!")
+}
+
+
+let weatherData = []
+
+app.post('/addWeather', storeWeatherData)
+
+function storeWeatherData(req, res) {
+    newWeatherEntry = {
+        maxTemp: req.body.maxTemp,
+        minTemp: req.body.minTemp,
+        press: req.body.press,
+        snow: req.body.snow,
+        clouds: req.body.cloudes,
+        wind: req.body.wind,
+        name: req.body.name,
+        cityName: req.body.cityName
+    }
+    weatherData.push(newWeatherEntry)
+    console.log("Weather Data Received!")
+    res.send(weatherData)
+}
+
+module.exports = { storeWeatherData }
+module.exports = { storeCoordinates }

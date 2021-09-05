@@ -11,37 +11,38 @@
 <body>
     <div id="app">
         <div class="holder headline">
-            <h1>Travel Weather App V1.0</h1>
+            <h1>Travel Weather App</h1>
         </div>
 
         <div class="holder zip">
             <label for="zip">Enter zipcode here: </label>
             <input type="text" id="zip" placeholder="enter zip code here">
         </div>
+        <!-- <div class="holder date">
+            Enter your departure date: <input type="date" id="date">
+        </div> -->
         <div class="holder date">
-            Enter your departure date: <input type="date" id="departureDate">
-            <br> Enter your return date: <input type="date" id="returnDate">
+            <label for="date">Enter departure date here: </label>
+            <input type="date" id="date" placeholder="enter departure date here">
         </div>
-        <br>
         <br>
         <button type="submit" id="submit" value="submit">Submit</button>
-    </div>
+        <br>
 
 
-
-
-    <br>
-
-    <div class="holder entry">
-        <div class="title">The weather at your location of <span id="chosenLocation"></span></div>will be:
-        <div id="entryHolder">
-            <div id="date"></div>
-            <div id="temp"></div>
-            <div id="content"></div>
+        <div class="holder entry">
+            <div id="image">
+                <img id="img" alt="">
+            </div>
+            <div class="title">Most Recent Entry</div>
+            <div id="value">
+                City Name:<input type="text" id="city-name" value=""> Pressure:
+                <input type="text" id="pressure" value=""> Temperature(min):
+                <input type="text" id="temp-min" value=""> Temperature(max):
+                <input type="text" id="temp-max" value="">
+            </div>
         </div>
     </div>
-
-
 
 </body>
 
