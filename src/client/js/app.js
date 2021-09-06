@@ -21,15 +21,15 @@ function submit(event) {
     let geonameApi = "&username=chrisdarden"
     let zip = document.getElementById('zip').value
     let date = document.getElementById('date').value
-        // let date = document.getElementById('dateEntry').value
-        //     //check for empty field
-        // if (zip == "" || date == "") {
-        //     document.getElementById('img').src = missed
-        //     alert("You have to enter a zipcode and date of travel.")
-        //     return
-        // }
+    let date = document.getElementById('dateEntry').value
+        //check for empty field
+    if (zip == "" || date == "") {
+        document.getElementById('img').src = missed
+        alert("You have to enter a zipcode and date of travel.")
+        return
+    }
 
-    // clearUI()
+    clearUI()
     let url = geoUrl + zip + geonameApi
     console.log(`url for getCoordinates is ${url}`)
     getCoordinates(url)
