@@ -21,10 +21,9 @@ function submit(event) {
     let geonameApi = "&username=chrisdarden"
     let zip = document.getElementById('zip').value
     let date = document.getElementById('date').value
-    let date = document.getElementById('dateEntry').value
         //check for empty field
     if (zip == "" || date == "") {
-        document.getElementById('img').src = missed
+        document.getElementById('img').src = ""
         alert("You have to enter a zipcode and date of travel.")
         return
     }
@@ -149,7 +148,6 @@ const getWeatherBitData = async(url) => {
 }
 
 function clearUI(a) {
-    document.getElementById('cityEntry').value = "";
     document.getElementById('city-name').innerHTML = "";
     document.getElementById('pressure').innerHTML = "";
     document.getElementById('temp-min').innerHTML = "";
