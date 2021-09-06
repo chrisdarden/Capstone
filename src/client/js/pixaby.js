@@ -15,7 +15,8 @@ getImage = async(res) => {
                 return pixabayData
             } else {
                 console.log("image not found")
-                return
+                pixabayData = { img: "" }
+                return pixabayData
             }
         })
         .catch(err => {

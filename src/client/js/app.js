@@ -17,6 +17,7 @@ const weatherbitKey = "7d4bdc7cf3c24e8d86b3934a7a659726"
 
 function submit(event) {
     event.preventDefault()
+    clearUI()
     let geoUrl = "http://api.geonames.org/postalCodeSearchJSON?country=us&postalcode="
     let geonameApi = "&username=chrisdarden"
     let zip = document.getElementById('zip').value
@@ -28,7 +29,7 @@ function submit(event) {
         return
     }
 
-    clearUI()
+
     let url = geoUrl + zip + geonameApi
     console.log(`url for getCoordinates is ${url}`)
     getCoordinates(url)
@@ -88,8 +89,15 @@ function submit(event) {
                     getImage(res).then(function(pixabayData) {
                         console.log(pixabayData);
                         let imgSrc = pixabayData.img;
-                        const img = document.getElementById("img");
-                        img.src = imgSrc;
+                        if (pixabayData.img == "") {
+                            console.log("got into noImg if")
+                            document.getElementById("noImg").innerHTML = "No image available."
+                            return
+                        } else {
+                            let img = document.getElementById("img");
+                            img.src = imgSrc;
+                        }
+
                     });
                 });
         })
@@ -148,10 +156,11 @@ const getWeatherBitData = async(url) => {
 }
 
 function clearUI(a) {
-    document.getElementById('city-name').innerHTML = "";
-    document.getElementById('pressure').innerHTML = "";
-    document.getElementById('temp-min').innerHTML = "";
-    document.getElementById('temp-max').innerHTML = "";
+    document.getElementById('noImg').innerHTML = ""
+    document.getElementById('city-name').innerHTML = ""
+    document.getElementById('pressure').innerHTML = ""
+    document.getElementById('temp-min').innerHTML = ""
+    document.getElementById('temp-max').innerHTML = ""
 }
 
 export { postData }
