@@ -1,126 +1,166 @@
-/* Global Variables */
-
-const pressMe = document.getElementById('submit');
-// const zipcode = document.getElementById("zip").value;
-
-// Date Function
-// function getDate() {
-//     let d = new Date();
-//     let month = d.getMonth() + 1;
-//     let newDate = month + '.' + d.getDate() + '.' + d.getFullYear();
-//     return newDate;
-// }
-
-// Generate event listener on generate button
-pressMe.addEventListener('click', (e) => {
-
-    e.preventDefault();
-    let zipcode = document.getElementById("zip").value;
-    console.log("Pressed")
-    console.log(`zipcode = ${zipcode}`)
-    if (zipcode == "" || zipcode.length < 5) {
-        window.alert('Please enter a zipcode of 5 digits.');
-        return
-    } else {
-        retrieveData("", zipcode);
+({
+    plugins: ['jsdom-quokka-plugin'],
+    'jsdom': {
+        'config': {
+            'file': 'src/client/views/index.html'
+        }
     }
-});
 
-// Retrieve the data from api
-const retrieveData = async(req, res) => {
-    console.log("retrieve data");
-    console.log(`zipcode = ${res}`)
-        // first fetch attempt to geoname url
-    await fetch('/geoname', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                'zip': res
+})
+
+import { getCoordinates } from './coordinates.js'
+import { getImage } from './pixaby.js';
+
+var weatherReport = {}
+document.getElementById('submit').addEventListener('click', submit);
+const weatherbitKey = "7d4bdc7cf3c24e8d86b3934a7a659726"
+
+function submit(event) {
+    event.preventDefault()
+    clearUI()
+    let geoUrl = "http://api.geonames.org/postalCodeSearchJSON?country=us&postalcode="
+    let geonameApi = "&username=chrisdarden"
+    let zip = document.getElementById('zip').value
+    let date = document.getElementById('date').value
+        //check for empty field
+    if (zip == "" || date == "") {
+        document.getElementById('img').src = ""
+        alert("You have to enter a zipcode and date of travel.")
+        return
+    }
+
+
+    let url = geoUrl + zip + geonameApi
+    console.log(`url for getCoordinates is ${url}`)
+    getCoordinates(url)
+        //then store coordinated and post data to server
+        .then((coordinates) => {
+            if (coordinates.totalResultsCount == 0) {
+                document.getElementById('img').src = notFound
+                alert("Invalid Location")
+                clearUI(1);
+            }
+            return postData('/addCoordinates', {
+                longitude: coordinates.postalCodes[0].lng,
+                latitude: coordinates.postalCodes[0].lat,
+                city: zip,
+                cityName: coordinates.postalCodes[0].placeName
             })
         })
-        .then(response => response.json())
+        .then(function(res) {
+            var index = res.length - 1
+            const lat = res[index].latitude
+            const lon = res[index].longitude
+            const cityName = res[index].cityName
+            return { lat, lon, cityName }
+        })
+        .then(function({ lat, lon, cityName }) {
+            const weatherbitUrl = `https://api.weatherbit.io/v2.0/forecast/daily?lat=${lat}&lon=${lon}&units=I&key=${weatherbitKey}`
+            getWeatherBitData(weatherbitUrl)
+                .then(async(weatherData) => {
+                    var i = weatherData.data.map((element) => element.valid_date).indexOf(date)
+                    if (i != -1) {
+                        return await postData('/addWeather', {
+                            maxTemp: weatherData.data[i].high_temp,
+                            minTemp: weatherData.data[i].low_temp,
+                            press: weatherData.data[i].pres,
+                            cityName: cityName
 
-    // sends data to server
-    .then(data => addEntry({...data }))
-        .catch(error => console.log(`Error: ${error}`));
+                        })
+                    } else {
+                        return postData('/addWeather', {
+                            maxTemp: "Weather Data Not Available!",
+                            minTemp: "Weather Data Not Available!",
+                            press: "Weather Data Not Available!",
+                            name: "Weather Data Not Available!",
+                        })
+                    }
+                })
+                .then(function(res) {
+                    var index = res.length - 1
+                    weatherReport = Object.assign({}, res[index]);
+                    // document.getElementById('print').style.display = "block"
+                    updateUI(res, index)
+                    console.log(res[index])
+                    return res[index].cityName
+                })
+                .then(function(res) {
+                    console.log("cityName is = " + res);
+                    getImage(res).then(function(pixabayData) {
+                        console.log(pixabayData);
+                        let imgSrc = pixabayData.img;
+                        if (pixabayData.img == "") {
+                            console.log("got into noImg if")
+                            document.getElementById("noImg").innerHTML = "No image available."
+                            return
+                        } else {
+                            let img = document.getElementById("img");
+                            img.src = imgSrc;
+                        }
 
-};
-
-// Send the data to the server
-const addEntry = (data) => {
-    console.log("in addEntry")
-    console.log("name= " + data.postalCodes[0].placeName)
-    console.log("lat= " + data.postalCodes[0].lat)
-    console.log("lng= " + data.postalCodes[0].lng)
-    const payload = data;
-    console.log(data);
-    // let newDate = getDate();
-    const userData = {
-        zip: zip.value,
-        name: data.postalCodes[0].placeName,
-        lat: data.postalCodes[0].lat,
-        lng: data.postalCodes[0].lng,
-
-    }
-    console.log(userData);
-    // fetch('/entry', {
-    //         method: 'POST',
-    //         credentials: 'same-origin',
-    //         headers: { 'Content-Type': 'application/json' },
-    //         body: JSON.stringify(payload)
-    //     })
-    //     // .then(userData => response.json())
-    //     // .then(() => getData())
-    //     // .then(updateUI(userData))
-    //     .catch(error => console.log(`Error: ${error}`));
-};
-
-// Function to update UI 
-function updateUI(userData) {
-    // console.log('in update');
-    // console.log(userData);
-    let newDate = getDate();
-    document.getElementById('date').innerHTML = `Today's date is ${newDate}.`;
-    document.getElementById('temp').innerHTML = `Temperature = ${userData.temperature} ℉`;
-    // console.log(isNaN(userData.feelings));
-    let x = isNaN(userData.feelings);
-    if (isNaN(userData.feelings) === false || userData.feelings == "") {
-        document.getElementById('content').innerHTML = "Apparently you aren't feeling anything.";
-    } else {
-        document.getElementById('content').innerHTML = `I'm feeling ${document.getElementById('feelings').value}`;
-    }
+                    });
+                });
+        })
 }
 
-// Retrieve data from the server
-const getData = async(url = "") => {
-    const response = await fetch("/entry");
+
+
+
+const postData = async(url = '', data = {}) => {
+    const response = await fetch(url, {
+        method: 'POST',
+        credientials: 'same-origin',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+    });
     try {
         const data = await response.json();
-        return data;
+        return data
     } catch (error) {
-        console.log(error);
+        alert("error" + error)
     }
 }
 
-// const getApi = async(url) => {
-//     const request = await fetch(url);
-//     try {
-//         const KEYS = request.json();
-//         return KEYS;
-//     } catch (error) {
-//         console.log(error);
-//     }
-// };
+const updateUI = async(res, index) => {
+    try {
+        if (res[index].press == "Weather Data Not Available!") {
+            document.getElementById('value').style.color = "red"
+                // document.getElementById('img').src = notFound
+        } else { document.getElementById('value').style.color = "black" }
 
-// //Get API Keys
-// async function getKey() {
-//     const res = await fetch('/api')
-//     try {
-//         const KEYS = res.json();
-//         return KEYS;
-//     } catch (error) {
-//         console.log('error', error);
-//     }
-// }
+        const cityName = res[index].cityName
+        console.log(`cityName is ${res[index].cityName}`)
+            //to use the last element stored in array we use index
+        document.getElementById('city-name').value = res[index].cityName;
+        document.getElementById('pressure').value = res[index].press;
+        document.getElementById('temp-min').value = res[index].minTemp;
+        document.getElementById('temp-max').value = res[index].maxTemp;
+
+        // document.getElementById('img').src = notFound
+        return { cityName }
+    } catch (error) { console.log("error1" + error) }
+}
+
+const getWeatherBitData = async(url) => {
+    const res = await fetch(url)
+    try {
+        const weatherData = await res.json();
+        console.log(weatherData)
+        return weatherData
+    } catch (error) {
+        console.log(error)
+    }
+
+}
+
+function clearUI(a) {
+    document.getElementById('noImg').innerHTML = ""
+    document.getElementById('city-name').innerHTML = ""
+    document.getElementById('pressure').innerHTML = ""
+    document.getElementById('temp-min').innerHTML = ""
+    document.getElementById('temp-max').innerHTML = ""
+}
+
+export { postData }
