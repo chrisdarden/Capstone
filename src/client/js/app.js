@@ -82,20 +82,17 @@ function submit(event) {
                     // document.getElementById('print').style.display = "block"
                     updateUI(res, index)
                     console.log(res[index])
-                    return res[index].name, res[index].cityName
+                    return res[index].cityName
                 })
-                .then(function(cityName) {
-                    console.log("cityName is = " + cityName)
-
-                    let pixabayData = getImage(cityName)
-                    console.log(pixabayData)
-                        .then(function(pixabayData) {
-                            console.log(pixabayData)
-                            let imgSrc = pixabayData.img
-                            const img = document.getElementById('img')
-                            img.src = imgSrc
-                        })
-                })
+                .then(function(res) {
+                    console.log("cityName is = " + res);
+                    getImage(res).then(function(pixabayData) {
+                        console.log(pixabayData);
+                        let imgSrc = pixabayData.img;
+                        const img = document.getElementById("img");
+                        img.src = imgSrc;
+                    });
+                });
         })
 }
 
@@ -125,9 +122,11 @@ const updateUI = async(res, index) => {
             document.getElementById('value').style.color = "red"
                 // document.getElementById('img').src = notFound
         } else { document.getElementById('value').style.color = "black" }
-        const cityName = res[index].name
+
+        const cityName = res[index].cityName
+        console.log(`cityName is ${res[index].cityName}`)
             //to use the last element stored in array we use index
-        document.getElementById('city-name').value = res[index].name;
+        document.getElementById('city-name').value = res[index].cityName;
         document.getElementById('pressure').value = res[index].press;
         document.getElementById('temp-min').value = res[index].minTemp;
         document.getElementById('temp-max').value = res[index].maxTemp;
