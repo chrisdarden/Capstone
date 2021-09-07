@@ -1,57 +1,37 @@
-<!DOCTYPE html>
-<html>
-
-<head>
-    <meta charset="UTF-8">
-    <title>Travel Weather App!</title>
-    <link href="https://fonts.googleapis.com/css?family=Oswald:400,600,700|Ranga:400,700&display=swap" rel="stylesheet">
-
-</head>
-
-<body>
-    <div id="app">
-        <div class="holder headline">
-            <h1>Travel Weather App</h1>
-        </div>
-
-        <div class="holder zip">
-            <label for="zip">Enter zipcode here: </label>
-            <input type="text" id="zip" placeholder="enter zip code here">
-        </div>
-        <!-- <div class="holder date">
-            Enter your departure date: <input type="date" id="date">
-        </div> -->
-        <div class="holder date">
-            <label for="date">Enter departure date here: </label>
-            <input type="date" id="date" placeholder="enter departure date here">
-        </div>
-        <br>
-        <button type="submit" id="submit" value="submit">Submit</button>
-        <br>
+// Media query for mobie @media only screen and (min-width: 320px) and (max-width: 479px) { .parent { display: grid; grid-template-columns: repeat(5, 1fr); grid-template-rows: repeat(5, 1fr); grid-column-gap: 0px; grid-row-gap: 0px; } .holder headline
+{ grid-area: 1 / 3 / 2 / 4; } .holder zip { grid-area: 2 / 3 / 3 / 4; } .holder date { grid-area: 3 / 3 / 4 / 4; } .holder entry { grid-area: 4 / 3 / 5 / 4; } } Enter your departure date: <input type="date" id="date">
+</div> -->
+<div class="holder date">
+    <label for="date">Enter departure date here: </label>
+    <input type="date" id="date" placeholder="enter departure date here">
+</div>
+<br>
+<button type="submit" id="submit" value="submit">Submit</button>
+<br>
 
 
-        <div class="holder entry">
-            <div id="image">
-                <img id="img" alt=""><span id="noImg"></span>
-            </div>
-            <div class="title">Most Recent Entry</div>
-            <div id="value">
-                City Name:<input type="text" id="city-name" value=""> Pressure:
-                <input type="text" id="pressure" value=""> Temperature(min):
-                <input type="text" id="temp-min" value=""> Temperature(max):
-                <input type="text" id="temp-max" value="">
-            </div>
-        </div>
+<div class="holder entry">
+    <div id="image">
+        <img id="img" alt=""><span id="noImg"></span>
     </div>
-    <script>
-        // Check that service workers are supported
-        if ('serviceWorker' in navigator) {
-            // Use the window load event to keep the page load performant
-            window.addEventListener('load', () => {
-                navigator.serviceWorker.register('/service-worker.js');
-            });
-        }
-    </script>
+    <div class="title">Most Recent Entry</div>
+    <div id="value">
+        City Name:<input type="text" id="city-name" value=""> Pressure:
+        <input type="text" id="pressure" value=""> Temperature(min):
+        <input type="text" id="temp-min" value=""> Temperature(max):
+        <input type="text" id="temp-max" value="">
+    </div>
+</div>
+</div>
+<script>
+    // Check that service workers are supported
+    if ('serviceWorker' in navigator) {
+        // Use the window load event to keep the page load performant
+        window.addEventListener('load', () => {
+            navigator.serviceWorker.register('/service-worker.js');
+        });
+    }
+</script>
 </body>
 
 </html>
