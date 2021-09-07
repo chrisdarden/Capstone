@@ -1,40 +1,3 @@
-//Media queries
-// Media query for mobie
-@media screen and (min-width: 320px) and (max-width: 479px) {
-    #app {
-        display: grid;
-        grid-template-rows: .1fr .10fr .10fr .5fr;
-        grid-template-columns: 1fr;
-        /* height: 100vh; */
-        width: 100vh;
-        color: #f0d43a;
-        grid-gap: 1em;
-        font-size: 20px;
-        font-family: 'Oswald', sans-serif;
-        justify-items: center;
-    }
-    // centers values
-    #value {
-        display: flex;
-        flex-direction: column;
-        justify-content: space-around;
-        align-items: center;
-    }
-    .holder headline {
-        grid-area: 1 / 3 / 2 / 4;
-    }
-    .holder zip {
-        grid-area: 2 / 3 / 3 / 4;
-    }
-    .holder date {
-        grid-area: 3 / 3 / 4 / 4;
-    }
-    .holder entry {
-        grid-area: 4 / 3 / 5 / 4;
-    }
-}
-
-// --------------------------------------------
 body {
     background: #f23557;
     width: 100vh;
@@ -192,3 +155,41 @@ button:focus {
 .title:after {
     margin-left: 10px
 }
+
+//Media queries
+// Media query for mobie
+@media screen and (min-width: 320px) and (max-width: 479px) {
+    #app {
+        display: grid;
+        grid-template-rows: .1fr .10fr .10fr .5fr;
+        grid-template-columns: 1fr;
+        /* height: 100vh; */
+        width: 100vh;
+        color: #f0d43a;
+        grid-gap: 1em;
+        font-size: 20px;
+        font-family: 'Oswald', sans-serif;
+        justify-items: center;
+    }
+    // centers values
+    #value {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-around;
+        align-items: center;
+    }
+    .holder headline {
+        grid-area: 1 / 3 / 2 / 4;
+    }
+    .holder zip {
+        grid-area: 2 / 3 / 3 / 4;
+    }
+    .holder date {
+        grid-area: 3 / 3 / 4 / 4;
+    }
+    .holder entry {
+        grid-area: 4 / 3 / 5 / 4;
+    }
+}
+
+// --------------------------------------------
