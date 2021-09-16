@@ -19,3 +19,6 @@ Steps taken to ensure project running:
 2. Run npm run start
 3. Navigate to localhost:8080 in the browser
 4. Enter zipcode, departure date, and return date
+
+[Added Feature]
+V.1 - Length of trip added under "Most Recent Entry" page
