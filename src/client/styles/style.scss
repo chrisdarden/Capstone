@@ -1,13 +1,15 @@
 body {
     background: #f23557;
+    margin-left: 25px;
+    margin-right: 25px;
     width: 100vh;
     font-family: -apple-system, BlinkMacSystemFont, sans-serif;
 }
 
 #app {
     display: grid;
-    grid-template-rows: .15fr .15fr .75fr .75fr;
-    /* grid-template-columns:  */
+    // grid-template-rows: .15fr .15fr .75fr .75fr;
+    grid-template-columns: auto;
     height: 100vh;
     width: 100vh;
     color: #f0d43a;
@@ -21,6 +23,7 @@ body {
     display: flex;
     flex-direction: column;
     justify-content: space-around;
+    align-items: center;
 }
 
 .entry {
@@ -28,46 +31,11 @@ body {
 }
 
 
-/* #entryHolder {} */
-
-// #date {
-//     margin-left: 25px;
-//     text-align: left;
-// }
-#temp {
-    margin-left: 25px;
-    text-align: left;
-}
-
-#content {
-    margin-left: 25px;
-    text-align: left;
-}
-
-.headline {
-    height: fit-content;
-    text-align: center;
-}
-
-
-/* .title {
-    text-align: center;
-} */
-
-
-/* #line {
-    display: block;
-    text-align: center;
-    width: 75%;
-    border-top: 1px solid #ccc;
-} */
-
-
-/*  Basic Styling To Override Default For Basic HTML Elements */
+/* Default For Basic HTML Elements */
 
 label {
     display: block;
-    font-size: 27px;
+    font-size: 30px;
 }
 
 input {
@@ -94,6 +62,7 @@ button {
     transition-duration: 0.4s;
 }
 
+//added hover effect on button
 button:hover {
     background-color: #4CAF50;
     color: white;
@@ -164,18 +133,28 @@ button:focus {
 
 //Media queries
 // Media query for mobie
-@media only screen and (max-width: 480px) and (orientation: portrait) {
-    #app {
+@media only screen and (max-width: 480px) {
+    body {
+        background: #f23557;
+        margin-left: 25px;
+        margin-right: 25px;
+        width: 100vh;
+        font-family: -apple-system, BlinkMacSystemFont, sans-serif;
         display: grid;
-        grid-template-rows: .1fr .10fr .10fr .5fr;
-        grid-template-columns: 1fr;
-        /* height: 100vh; */
+        grid-auto-columns: 100%;
+    }
+    h1 {
+        font-size: 40px;
+        align-self: center;
+    }
+    #app {
+        height: 100vh;
         width: 100vh;
         color: #f0d43a;
+        justify-content: center;
         grid-gap: 1em;
         font-size: 20px;
         font-family: 'Oswald', sans-serif;
-        justify-items: center;
     }
     #img {
         display: block;
@@ -183,7 +162,6 @@ button:focus {
         margin-right: auto;
         width: 40%;
     }
-    // centers values
     #value {
         display: flex;
         flex-direction: column;
@@ -205,5 +183,3 @@ button:focus {
         grid-area: 4 / 3 / 5 / 4;
     }
 }
-
-// --------------------------------------------
