@@ -25,7 +25,8 @@ function storeCoordinates(req, res) {
         longitude: req.body.longitude,
         latitude: req.body.latitude,
         city: req.body.city,
-        cityName: req.body.cityName
+        cityName: req.body.cityName,
+        tripLength: req.body.tripLength
     }
     locationData.push(newEntry)
     console.log("Location Coordinates Received!")
@@ -54,7 +55,8 @@ function storeWeatherData(req, res) {
         clouds: req.body.cloudes,
         wind: req.body.wind,
         name: req.body.name,
-        cityName: req.body.cityName
+        cityName: req.body.cityName,
+        tripLength: req.body.tripLength
     }
     weatherData.push(newWeatherEntry)
     console.log("Weather Data Received!")

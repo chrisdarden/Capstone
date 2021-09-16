@@ -10,6 +10,7 @@
 
 import { getCoordinates } from './coordinates.js'
 import { getImage } from './pixaby.js';
+import { calcDate } from './dateCalc'
 
 var weatherReport = {}
 document.getElementById('submit').addEventListener('click', submit);
@@ -22,15 +23,23 @@ function submit(event) {
     let geonameApi = "&username=chrisdarden"
     let zip = document.getElementById('zip').value
     let date = document.getElementById('date').value
-        //check for empty field
-    if (zip == "" || date == "") {
+    let retDate = document.getElementById('retDate').value
+    let tripLength = calcDate(date, retDate)
+
+    //check for empty field
+    if (zip == "" || date == "" || retDate == "") {
         document.getElementById('img').src = ""
         alert("You have to enter a zipcode and date of travel.")
         return
     }
-
+    if (zip.length < 5) {
+        document.getElementById('img').src = ""
+        alert("Zipcode must be 5 digits")
+        return
+    }
 
     let url = geoUrl + zip + geonameApi
+    console.log(`tripLength is ${tripLength}`)
     console.log(`url for getCoordinates is ${url}`)
     getCoordinates(url)
         //then store coordinated and post data to server
@@ -44,7 +53,8 @@ function submit(event) {
                 longitude: coordinates.postalCodes[0].lng,
                 latitude: coordinates.postalCodes[0].lat,
                 city: zip,
-                cityName: coordinates.postalCodes[0].placeName
+                cityName: coordinates.postalCodes[0].placeName,
+                tripLength: tripLength
             })
         })
         .then(function(res) {
@@ -64,8 +74,8 @@ function submit(event) {
                             maxTemp: weatherData.data[i].high_temp,
                             minTemp: weatherData.data[i].low_temp,
                             press: weatherData.data[i].pres,
-                            cityName: cityName
-
+                            cityName: cityName,
+                            tripLength: tripLength
                         })
                     } else {
                         return postData('/addWeather', {
@@ -80,7 +90,7 @@ function submit(event) {
                     var index = res.length - 1
                     weatherReport = Object.assign({}, res[index]);
                     // document.getElementById('print').style.display = "block"
-                    updateUI(res, index)
+                    updateUI(res, index, retDate)
                     console.log(res[index])
                     return res[index].cityName
                 })
@@ -100,7 +110,7 @@ function submit(event) {
 
                     });
                 });
-        })
+        }).catch(error => alert("Internet offline! Check and run again."));
 }
 
 
@@ -137,8 +147,8 @@ const updateUI = async(res, index) => {
         document.getElementById('pressure').value = res[index].press;
         document.getElementById('temp-min').value = res[index].minTemp;
         document.getElementById('temp-max').value = res[index].maxTemp;
-
-        // document.getElementById('img').src = notFound
+        document.getElementById('tripLength').value = res[index].tripLength + " days!"
+            // document.getElementById('img').src = notFound
         return { cityName }
     } catch (error) { console.log("error1" + error) }
 }

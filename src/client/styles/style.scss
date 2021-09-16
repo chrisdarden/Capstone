@@ -91,6 +91,12 @@ button {
     font-family: 'Oswald', sans-serif;
     border: none;
     box-shadow: 2px 4px 5px #444;
+    transition-duration: 0.4s;
+}
+
+button:hover {
+    background-color: #4CAF50;
+    color: white;
 }
 
 h1 {
@@ -158,7 +164,7 @@ button:focus {
 
 //Media queries
 // Media query for mobie
-@media screen and (min-width: 320px) and (max-width: 479px) {
+@media only screen and (max-width: 480px) and (orientation: portrait) {
     #app {
         display: grid;
         grid-template-rows: .1fr .10fr .10fr .5fr;
@@ -170,6 +176,12 @@ button:focus {
         font-size: 20px;
         font-family: 'Oswald', sans-serif;
         justify-items: center;
+    }
+    #img {
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+        width: 40%;
     }
     // centers values
     #value {
