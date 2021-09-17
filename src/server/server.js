@@ -9,13 +9,18 @@ app.use(cors());
 app.use(express.static('dist'));
 
 const port = 8080;
-const server = app.listen(port, listening);
+const server = app.listen(8080);
 
-function listening() {
-    console.log(`The server is running locally on port:${port}`);
-};
+// function listening() {
+//     console.log(`The server is running locally on port:${port}`);
+// };
 
 var locationData = [];
+
+// TEST route
+app.get('/test', async(req, res) => {
+    res.json({ message: 'pass!' })
+})
 
 //POST
 app.post('/addCoordinates', storeCoordinates)
@@ -65,3 +70,4 @@ function storeWeatherData(req, res) {
 
 module.exports = { storeWeatherData }
 module.exports = { storeCoordinates }
+module.exports = app // for supertest export

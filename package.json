@@ -39,6 +39,7 @@
         "optimize-css-assets-webpack-plugin": "^5.0.6",
         "sass-loader": "^10.1.1",
         "style-loader": "^2.0.0",
+        "supertest": "^6.1.6",
         "terser-webpack-plugin": "^1.4.5",
         "webpack-dev-server": "^3.11.0",
         "workbox-webpack-plugin": "^6.1.5"
